@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Juego 2D - lección 02</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        *{
+            font-family: 'Poppins', sans-serif;
+        }
+        body{
+            background-color: #222222;
+        }
+        header h1{
+            color: #eeeeee;
+            text-align: center;
+            padding: 20px;
+        }
+        * { 
+            padding: 0; 
+            margin: 0; 
+        }
+        canvas { 
+            background: #1d1d1dd0; 
+            display: block; 
+            margin: 0 auto;
+            transition: 0.5s;
+        }
+        canvas.activado { 
+            background: #777777d0; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            JUEGO 2D
+        </h1>
+    </header>
+
+<canvas id="miCanvas" width="960" height="640"></canvas>
+
+<script>
+    var canvas = document.getElementById("miCanvas");
+    var ctx = canvas.getContext("2d");
+
+    /* Se agrega la variable ballRadius, la cual define el tamaño de la bola */
+    var ballRadius = 10; // <--------------------
+
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var dx = 2;
+    var dy = -2;
+
+    function dibujarBola() {
+        ctx.beginPath();
+
+        /* En lugar de un número fijo, se coloca la variable ballRadius */
+        ctx.arc(x, y, ballRadius, 0, Math.PI*2); // <----------------
+
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    var x2 = canvas.width/2;
+    var y2 = canvas.height-30;
+    var dx2 = -2;
+    var dy2 = -2;
+
+    function dibujarBola2() {
+        ctx.beginPath();
+        ctx.arc(x2, y2, ballRadius, 0, Math.PI*2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    var x3 = canvas.width/2;
+    var y3 = canvas.height-30;
+    var dx3 = 2;
+    var dy3 = -2;
+
+    function dibujarBola3() {
+        ctx.beginPath();
+        ctx.arc(x3, y3, 5, 0, 10);
+        ctx.fillStyle = "#ff0000";
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function dibujar() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        dibujarBola();
+        dibujarBola2();
+        dibujarBola3();
+
+
+        /* IMPORTANTE:
+
+           EL OPERADOR || es el operador lógico OR
+           Este operador se utiliza para indicar la condición de conjunción
+           SI SE CUMPLE UNA CONDICIÓN, O SE CUMPLE OTRA CONDICIÓN, ENTONCES
+           SE CUMPLE LA CONDICIÓN
+
+           EL OPERADOR && es el oerador lógico AND
+           Este operador se utiliza para indicar la condicion de disyunción
+           SI SE CUMPLE UNA CONDICIÓN, Y SE CUMPLE OTRA CONDICIÓN (simultánea), ENTONCES
+           SE CUMPLE LA CONDICIÓN
+
+        */
+
+        /* DESPUÉS DE DIBUJAR LA BOLA, SE DEBEN CAMBIAR LAS COORDENADAS
+           EN LA lección 01 NO SE TENÍA CONTROL SOBRE LOS LÍMITES DE LA CAJA
+           -----------------------------------------------------------------
+           SI x + dx ES MAYOR AL ANCHO DEL CANVAS O MENOR AL TAMAÑO DEL
+           RADIO DE LA BOLA (caso en el cual se encuentra hacia la izquierda)
+           SE CAMBIA LA DIRECCIÓN DE AVANCE HORIZONTAL. 
+           ESTO SE LOGRA CAMBIANDO EL SIGNO DE LA VARIABLE dx 
+           ESTO HACE QUE SE CAMBIE EL SENTIDO DEL MOVIMIENTO HORIZONTAL */
+        if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) { // <-----------------
+            dx = dx * (-1);
+        }
+
+        /* SI y + dy ES MAYOR A LA ALTURA DEL CANVAS O MENOR AL TAMAÑO DEL
+           RADIO DE LA BOLA, SE CAMBIA LA DIRECCIÓN DEL AVANCE VERTICAL.
+           ESTO SE LOGRA CAMBIANDO EL SIGNO DE LA VARIABLE dy
+           ESTE CAMBIO EN dy HACE QUE SE MUEVA VERTICALMENTE EN SENTIDO
+           OPUESTO */       
+        if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) { // <-----------------
+            dy = -dy;
+        }
+
+        if (x2 + dx2 > canvas.width-ballRadius || x2 + dx2 < ballRadius) { // <-----------------
+            dx2 = dx2 * (-1);
+        }      
+        if(y2 + dy2 > canvas.height-ballRadius || y2 + dy2 < ballRadius) { // <-----------------
+            dy2 = -dy2;
+        }
+   
+        if(y3 + dy3 > canvas.height-ballRadius || y3 + dy3 < ballRadius) { // <-----------------
+            dy3 = -dy3;
+
+            var activado = document.querySelector("canvas");
+            activado.classList.toggle("activado");
+        }
+
+        /* AQUÍ SE CAMBIA LA POSICIÓN DE LA BOLA. SE TOMA EN CUENTA LAS
+           MODIFICACIONES A dx y dy, EN CASO DE QUE SE HUBIERAN PRODUCIDO */
+        x += dx; // EQUIVALE A: x = x + dx; <----------------
+        y += dy; // EQUIVALE A: y = y + dy; <----------------
+         // Se incrementa x en el valor dx
+        x2 = x2 + dx2;
+
+        // Se incrementa y en el valor dy
+        y2 = y2 + dy2;
+
+        // Se incrementa y en el valor dy
+        y3 = y3 + dy3;
+    }
+
+    setInterval(dibujar, 5);
+</script>
+
+</body>
+</html>
